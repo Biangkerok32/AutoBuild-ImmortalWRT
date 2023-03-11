@@ -38,7 +38,7 @@ jobs:
     - name: Build OpenWrt
       run: |
         cd "/home/runner/openwrt"
-        cp -f "${GITHUB_WORKSPACE}/configs/r2s.config" ".config"
+        cp -f "${GITHUB_WORKSPACE}/configs/rpi2.config" ".config"
         make defconfig
         make -j$[$(nproc)+1]
         
@@ -52,8 +52,8 @@ jobs:
       id: assemble_artifact
       run: |
         cd "/home/runner"
-        zip OpenWrt-R2S.zip immortalwrt-18.06-rockchip-armv8-friendlyarm_nanopi-r2s-ext4-sysupgrade.img.gz immortalwrt-18.06-rockchip-armv8-friendlyarm_nanopi-r2s-squashfs-sysupgrade.img.gz
-        release_tag="R2S-$(date +%Y-%m-%d)"
+        zip OpenWrt-RPI2.zip immortalwrt-18.06-rockchip-armv8-friendlyarm_nanopi-r2s-ext4-sysupgrade.img.gz immortalwrt-18.06-rockchip-armv8-friendlyarm_nanopi-r2s-squashfs-sysupgrade.img.gz
+        release_tag="RPI2-$(date +%Y-%m-%d)"
         echo "##[set-output name=release_tag;]$release_tag"
     - name: Create Release
       id: create_release
@@ -72,11 +72,11 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: /home/runner/OpenWrt-R2S.zip
-        asset_name: OpenWrt-R2S.zip
+        asset_path: /home/runner/OpenWrt-RPI2.zip
+        asset_name: OpenWrt-RPI2.zip
         asset_content_type: application/zip
     - name : Upload Artifact
       uses: actions/upload-artifact@master
       with:
         name: OpenWrt(Download This or Go to Release Page)
-        path: /home/runner/OpenWrt-R2S.zip
+        path: /home/runner/OpenWrt-RPI2.zip
